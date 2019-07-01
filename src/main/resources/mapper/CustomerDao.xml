@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team.bookTicket.dao.CustomerDao">
+	<select id="findById" resultType="Customer">
+		select *
+		from customer
+		where id=#{id}
+	</select>
+	<select id="findByCardId" resultType="Customer">
+		select *
+		from customer
+		where cardId=#{cardId}
+	</select>
+	<select id="all" resultType="Customer">
+		select *
+		from customer
+		<if test="offset !=null and count!=null">
+			limit #{offset},#{count}
+		</if>
+	</select>
+	<insert id="add" useGeneratedKeys="true" keyProperty="id">
+		insert
+		into customer(cardId,name,address,phone,isAdmin)
+		values(#{cardId},#{name},#{address},#{phone},#{isAdmin})
+	</insert>
+	<delete id="delete">
+		delete
+		from customer
+		where id=#{id}
+	</delete>
+	<update id="update">
+		update customer
+		<set>
+			<if test="cardId !=null">cardId=#{cardId},</if>
+			<if test="name !=null">name=#{name},</if>
+			<if test="address !=null">address=#{address},</if>
+			<if test="phone !=null">phone=#{phone},</if>
+			<if test="isAdmin != null">isAdmin=#{isAdmin}</if>
+		</set>
+		<where>
+			id=#{id}
+		</where>
+	</update>
+</mapper>

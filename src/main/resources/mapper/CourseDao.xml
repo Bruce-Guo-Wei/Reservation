@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team.bookTicket.dao.CourseDao">
+	<select id="findById" resultType="Course">
+		select *
+		from course
+		where id=#{id}
+	</select>
+	<select id="all" resultType="Course">
+		select *
+		from course
+		<if test="offset !=null and count!=null">
+			limit #{offset},#{count}
+		</if>
+	</select>
+	<select id="allAvailable" resultType="Course">
+		select course.*
+		from course join ticket on course.id=ticket.movieID
+		where playTime>now()
+	</select>
+	<select id="allAvailable2" resultType="Course">
+		select distinct course.*
+		from course join ticket on course.id=ticket.movieID
+		where playTime>now()
+	</select>
+	<insert id="add" useGeneratedKeys="true" keyProperty="id">
+		insert
+		into course(name,kind,duration,introduction,image)
+		values(#{name},#{kind},#{duration},#{introduction},#{image})
+	</insert>
+	<delete id="delete">
+		delete
+		from course
+		where id=#{id}
+	</delete>
+	<update id="update">
+		update course
+		<set>
+			<if test="name !=null">name=#{name},</if>
+			<if test="kind !=null">kind=#{kind},</if>
+			<if test="duration !=null">duration=#{duration},</if>
+			<if test="introduction !=null">introduction=#{introduction},</if>
+			<if test="image !=null">image=#{image}</if>
+		</set>
+		where id=#{id}
+	</update>
+</mapper>
